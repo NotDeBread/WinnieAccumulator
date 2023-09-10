@@ -90,6 +90,9 @@ function startCredits() {
     <span style="font-size: 1.25em; margin-top: 20px;">Gavin's Dog:</span>
     <span style="font-size: 1.5em; font-weight: 700;">Shadow</span>
 
+    <span style="font-size: 1.25em; margin-top: 20px;">Hugo's Dog:</span>
+    <span style="font-size: 1.5em; font-weight: 700;">Basil</span>
+
     <span style="margin-top: 100px;">-Special Thanks-</span>
     <span style="font-size: 1.5em; font-weight: 700;">RedJive2</span>
     <span style="font-size: 1.5em; font-weight: 700;">Zeko</span>

@@ -466,6 +466,7 @@ const save = JSON.parse(localStorage.getItem("WinnieAccumulatorSave")) ?? {
             'Kisa',
             'Bruno',
             'Shadow',
+            'Basil',
         ]
     },
 
