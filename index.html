@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" type="image/png" href="media/icon.webp">
+    <title>Winnie Accumulator</title>
+</head>
+
+<body id="body">
+
+    <div id="loadingScreen">
+        <span id="loadingScreenText">Loading...</span>
+        <div class="loadingScreenBar">
+            <div id="loadingScreenBarOverlay"></div>
+            <div id="loadingScreenBarWaves"></div>
+        </div>
+    </div>
+
+    <div id="screenOverlay">
+
+    </div>
+
+    <div id="debugChat">
+        <div id="debugOutput"></div>
+        <input id="debugInput" placeholder="Enter text here. Type !help for commands.">
+    </div>
+
+    <div id="centerNotiContainer"></div>
+
+    <div id="tooltip">
+        <span id="tooltipTitle">Tooltip Title</span>
+        <em id="tooltipQuote">"Tooltip Quote"</em>
+        <img id="tooltipImg" src="media/upgrades/silvercursors.png" width="50">
+        <span id="tooltipDesc">This is the tooltip description</span>
+        <span id="tooltipPrice">1,000</span>
+    </div>
+
+    <div id="achContainer">
+        <!-- <div class="ach">
+            <img src="media/icons/achievement.png" height="32" style="filter: invert();">
+            <div class="achInfo">
+                <span class="achTitle">Ach Title</span>
+                <span class="achDesc">Ach Desc</span>
+            </div>
+        </div> -->
+    </div>
+
+    <div id="creditsContainer">
+        <!-- <div id="credits">
+            <span style="font-size: 2em; font-weight: 700;">Winnie Accumulator</span>
+
+            <span style="margin-top: 50px;">-Creator-</span>
+            <span style="font-size: 1.5em; font-weight: 700;">DeBread</span>
+
+            <span style="margin-top: 100px;">-Characters-</span>
+            <span style="font-size: 1.25em; margin-top: 20px;">DeBread's Dogs:</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Winnie</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Kisa</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Junior</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Eddie</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Rodger</span>
+
+            <span style="font-size: 1.25em; margin-top: 20px;">Redjive Dog:</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Sasha</span>
+
+            <span style="font-size: 1.25em; margin-top: 20px;">Beckett's Dog:</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Asher</span>
+
+            <span style="font-size: 1.25em; margin-top: 20px;">Erix's Dog:</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Walter</span>
+
+            <span style="margin-top: 100px;">-Special Thanks-</span>
+            <span style="font-size: 1.5em; font-weight: 700;">RedJive2</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Zesto</span>
+            <span style="font-size: 1.5em; font-weight: 700;">Zeko</span>
+        </div> -->
+    </div>
+
+    <span id="gambleButton" onclick="openGamble()">Gamble</span>
+
+    <div id="gambleContainer">
+        <div id="gamble">
+            <div class="gambleHeader">
+                <span>Gamble</span>
+                <button onclick="openGamble()">X</button>
+            </div>
+            <div class="innerGamble">
+                <section>
+                    <span id="betError"></span>
+                    <span>Bet:</span>
+                    <div class="betInputContainer">
+                        <input type="number" id="gambleInput">
+                        <span>%</span>
+                    </div>
+                    <span id="betValue"></span>
+                    <span id="betWin"></span>
+                    <button id="gambleStartButton" onclick="testGamble()">Test your luck</button>
+                </section>
+                <section>
+                    <div style="display: flex; gap: 5px">
+                        <span style="font-weight: 900;">></span>
+                        <div id="gambleWheel">
+                            <div id="innerGambleWheel"></div>
+                        </div>
+                        <span style="font-weight: 900;">&lt;</span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <span onclick="toggleMenu('devTools')" id="devButton">Developer Tools</span>
+
+    <div id="devTools">
+        <div class="devHeader">
+            <span class="devTitle">Developer Tools</span>
+            <button onclick="toggleMenu('devTools')">X</button>
+        </div>
+        <span>Orbs</span>
+        <div class="devButtonRow">
+            <button onclick="save.totalorbs += (save.orbs *= 10); save.orbs *= 10">x10</button>
+            <button onclick="save.totalorbs += (save.orbs *= 1000); save.orbs *= 1000">x1000</button>
+            <button onclick="save.orbs /= 10">/10</button>
+            <button onclick="save.orbs /= 1000">/1000</button>
+        </div>
+        <span>Prestige Orbs</span>
+        <div class="devButtonRow">
+            <button onclick="save.prestigeOrbs *= 10">x10</button>
+            <button onclick="save.prestigeOrbs *= 1000">x1000</button>
+        </div>
+        <span>Unlock...</span>
+        <div class="devButtonRow">
+            <button onclick="save.gamblingUnlocked = true; gambleCheck()">Gambling</button>
+            <button onclick="save.spellsUnlocked = true; spellsCheck()">Spells</button>
+        </div>
+        <span>Flasks</span>
+        <div class="devButtonRow">
+            <button onclick="save.flasks.current = save.flasks.max; updateSpellInfo()">Max</button>
+            <button onclick="save.flasks.current = Infinity; updateSpellInfo()">Infinity</button>
+            <button onclick="save.flasks.max *= 10; updateSpellInfo()">Max x10</button>
+        </div>
+        <span>Upgrades</span>
+        <div class="devButtonRow">
+            <button onclick="dev.unlockAllUpgrades()">Unlock All Upgrades</button>
+        </div>
+        <span>Misc</span>
+        <div class="devButtonRow">
+            <button onclick="createGoldenWinnie(DeBread.randomNum(0, 4))">Golden Winnie</button>
+            <button onclick="startGoldenWinnieEvent(DeBread.randomNum(0, 4))">GW Effect</button>
+        </div>
+        <div class="devButtonRow">
+            <button onclick="dev.getAllAchievements()">Get All Achievements</button>
+        </div>
+        <div class="devButtonRow">
+            <button onclick="dev.lockAllAchievements()">Lock All Achievements</button>
+        </div>
+        <div class="devButtonRow">
+            <button onclick="goldenWPSMultiplier *= 10; setTimeout(() => {goldenWPSMultiplier /= 10}, 30000)">10x EPS for 30 seconds</button>
+        </div>
+    </div>
+
+    <span onclick="toggleMenu('help')" class="helpButton">Help</span>
+
+    <div id="help">
+        <div class="helpHeader">
+            <span>Help</span>
+            <button onclick="toggleMenu('help')">X</button>
+        </div>
+        <div class="helpHeading">
+            <span>Critical Clicks</span>
+        </div>
+        <div class="helpP">
+            <span>
+                When clicking the Winnie Orb, you have a 1 out of 100 chance of getting a critical click. Critical clicks give you anywhere from 1.5
+                to 3 times your WPC. Upgrades and items can help increase the chance of getting a critical click and increase the value of getting critical
+                clicks. You can also view your critical click chance in the statistics menu; the lower, the better.<br>
+                Your WPC has a multiplier added to it based on how many times you have gotten a critical click. Every time you get a critical click the
+                multiplier gets added by 0.001. It doesn't sound like much, but when you get a 20/10 Vision Golden Winnie it can make a big difference.
+            </span>
+        </div>
+        <div class="helpHeading">
+            <span>Prestige</span>
+        </div>
+        <div class="helpP">
+            <span>
+                When you reach 1 million Winnie Orbs, you gain 1 prestige token. A prestige token gives a +10% increase to you WPS and WPC. Everytime you get a
+                a token, the goal to get another one increases by x1.1, meaning if you just got a token for reaching 1 million total Winnie Orbs,
+                you would have to get another 1.1 million Winnie orbs for your next token.<br>
+                When you prestige you lose all Winnie Orbs, items, tools, and upgrades, but claims your prestige tokens which boosts your WPS and WPC based
+                on how many you got. After prestiging, your goal to get another prestige token resets back to 1 million, meaning that you can exponentially more
+                prestige tokens the more you play.
+            </span>
+        </div>
+    </div>
+
+    <span onclick="toggleMenu('stats')" class="statsButton">Statistics</span>
+
+    <div id="stats">
+        <div class="statsHeader">
+            <span>Statistics</span>
+            <button onclick="toggleMenu('stats')">X</button>
+        </div>
+        <div class="stat">
+            <span id="statTotalWinnieOrbs">Total Winnie Orbs: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statWinnieOrbsSpent">Winnie Orbs Spent: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statTimesClicked">Times Clicked: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statItemsBought">Items Bought: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statCritChance">Critical Click Chance: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statCriticalClickMultiplier">WPC Critical Click Multiplier: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statgoldenWinnieChance">Golden Winnie Chance: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statgoldenWinniesSpawned">Golden Winnies Spawned: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statgoldenWinniesClicked">Golden Winnies Clicked: 0</span>
+        </div>
+        <div class="stat">
+            <span id="statTimesGambled">Times Gambled: 0</span>
+        </div>
+        <div class="stat" style="margin-top: 25px;">
+            <span id="statUpgradesBought">Upgrades Bought: 0</span>
+        </div>
+        <div id="statUpgrades">
+
+        </div>
+    </div>
+
+    <span onclick="toggleMenu('achievements')" class="achievementsButton">Achievements</span>
+
+    <div id="achievements">
+        <div class="achievementsHeader">
+            <span id="achievementsTitle">Achievements - 0 / 0</span>
+            <button onclick="toggleMenu('achievements')">X</button>
+        </div>
+        <div class="achievementModes">
+            <button onclick="achievementMode = 0; updateAchievements()">All</button>
+            <button onclick="achievementMode = 1; updateAchievements()">Unlocked</button>
+            <button onclick="achievementMode = 2; updateAchievements()">Normal</button>
+            <button onclick="achievementMode = 3; updateAchievements()">Rare</button>
+            <button onclick="achievementMode = 4; updateAchievements()">Secret</button>
+        </div>
+        <div id="achievementsList">
+            <!-- <div class="achievement">
+                <span class="achievementTitle">Achievement Name</span>
+                <em class="achievementDesc">Achievement Desc</em>
+            </div> -->
+        </div>
+    </div>
+
+    <span onclick="toggleMenu('settings')" class="settingsButton">Settings</span>
+
+    <div id="settings">
+        <div class="settingsHeader">
+            <span style="font-weight: 700; font-size: 1.25em;">Settings</span>
+            <button onclick="toggleMenu('settings')">X</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div class="setting">
+                <input type="checkbox" checked onclick="updateSetting('showWPSOnClick')" id="showWPSOnClickInput">
+                <span>Show WPS on click</span>
+            </div>
+            <div class="setting">
+                <input type="checkbox" checked onclick="updateSetting('orbEffects')" id="orbEffectsInput">
+                <span>Orb effects</span>
+            </div>
+            <div class="setting">
+                <input type="checkbox" checked onclick="updateSetting('formatNumbers')" id="formatNumbersInput">
+                <span>Format Numbers</span>
+            </div>
+            <div class="setting">
+                <input type="checkbox" checked onclick="updateSetting('sfx')" id="sfxInput">
+                <span>SFX</span>
+            </div>
+            <div style="display: flex; align-items: center; flex-direction: column;">
+                <span id="sfxVolumeDisplay">SFX Volume: -</span>
+                <input id="volumeInput" type="range" max="200" min="0" step="10" style="width: 100%;">
+            </div>
+            <div class="setting" style="width: 100%; justify-content: space-between;">
+                <button onclick="changeMode('prev')">&#60;</button>
+                <span id="modeSelected">Mode</span>
+                <button onclick="changeMode('next')">></button>
+            </div>
+            <button style="width: 100% !important;" onclick="startCredits(); toggleMenu('settings')">Credits</button>
+            <button style="width: 100% !important;" onclick="autosave()">Save</button>
+            <span style="font-size: 0.75em; color: grey;">You can also save by pressing S.</span>
+            <span id="deleteSave">Delete Save</span>
+        </div>
+    </div>
+
+    <div id="goldenTimerContainer"></div>
+
+    <div id="prestigeWarningContainer">
+        <div class="prestigeWarning">
+            <div class="prestigeWarningHeader">
+                <span>Warning</span>
+                <button onclick="openPrestige()">X</button>
+            </div>
+            <div class="prestigeWarningInfo">
+                <span id="pWarningInfo1">You're about for forfeit - Winnie Orbs for - Prestige Tokens, are you sure?</span><br>
+                <em style="color: grey;" id="pWarningInfo2">You will permanently lose: - Winnie Orbs and all upgrades, items, and tools.</em>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 5px;">
+                <button class="prestigeContinue" onclick="prestige()">PRESTIGE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game">
+        <div class="goldenWinnieContainer">
+            <div id="goldenWinnieContainer"></div>
+        </div>
+        <section class="gameLeft">
+            <div class="counters">
+                <span id="countDisplay">0 Winnie Orbs</span>
+                <span id="WPSDisplay">0 WPS</span>
+                <span id="WPCDisplay">1 WPC</span>
+                <span id="cheatsDisplay"></span>
+            </div>
+            <div class="sphereContainer">
+                <img id="sphere" src="media/spheres/winnie.gif" onclick="sphereClick()">
+            </div>
+        </section>
+
+        <section class="gameRight">
+            <div class="upgradeStore">
+                <span>Upgrades</span>
+                <div id="upgradeContainer">
+                    <div id="noUpgrades">
+                        <span>No upgrades available!</span>
+                    </div>
+                </div>
+            </div>
+            <div id="spellsContainer">
+                <span>Spells</span>
+                <div id="spells">
+
+                </div>
+                <div class="flasksContainer">
+                    <div class="flasksBar">
+                        <div class="flasksInfo">
+                            <span id="flaskInfo">0 / 0</span>
+                        </div>
+                        <div id="flasksBarOverlay"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="itemStore">
+                <span>Store</span>
+                <div class="storeButton">
+                    <button id="buyAmount1" onclick="buyAmount = 1; updateBuyAmount()">1x</button>
+                    <button id="buyAmount10" onclick="buyAmount = 10; updateBuyAmount()">10x</button>
+                    <button id="buyAmount100" onclick="buyAmount = 100; updateBuyAmount()">100x</button>
+                </div>
+                <!-- <div class="item" onclick="buyItem('cursor')"
+                    onmouseenter="displayTooltip('Cursor',`Buy some more mice from your local Best Buy for more ${orbLabel} accumulation.`, 'media/items/cursor.png', `Boosting ${orbLabel[0]}PS by ${save.items.cursor.count * save.items.cursor.multiplier}<br> <em style='color: grey;'>(${save.items.cursor.baseWPS * save.items.cursor.multiplier} each)</em>`, Math.round(compoundPrice(save.items.cursor.price, buyAmount)))"
+                    onmouseleave="hideTooltip()">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="media/items/cursor.png" class="itemImg">
+                        <div class="itemInfo">
+                            <span>Cursor</span>
+                            <span class="itemPrice" id="cursorPrice">10</span>
+                        </div>
+                    </div>
+                    <div class="itemCount">
+                        <span id="cursorCount">0</span>
+                    </div>
+                </div> -->
+            </div>
+            <div id="toolStore">
+                <span>Tools</span>
+                <!-- <div class="item" onclick="buyItem('reinforcedGloves')"
+                    onmouseenter="displayTooltip('Reinforced Gloves','Go to the shady store around the corner to buy some reinforced gloves for more efficient clicking.', 'media/items/reinforcedGloves.png', `Boosting ${orbLabel[0]}PC by ${(save.items.reinforcedGloves.count * 0.25) * save.items.reinforcedGloves.multiplier}  <br> <em style='color: grey;'>(${save.items.reinforcedGloves.baseWPS * save.items.reinforcedGloves.multiplier} each)</em>`, Math.round(compoundPrice(save.items.reinforcedGloves.price, buyAmount)))"
+                    onmouseleave="hideTooltip()">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="media/items/reinforcedGloves.png" class="itemImg">
+                        <div class="itemInfo">
+                            <span>Reinforced Gloves</span>
+                            <span class="itemPrice" id="reinforcedGlovesPrice">100</span>
+                        </div>
+                    </div>
+                    <div class="itemCount">
+                        <span id="reinforcedGlovesCount">0</span>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+    </div>
+
+    <div class="prestigeContainer">
+        <span class="prestigeTab">Prestige</span>
+        <div class="prestige">
+            <div style="display: flex; align-items: center; gap: 5px; font-weight: 700;">
+                <span style="min-width: 25px; text-align: center;" id="tokenCountCurrent">0</span>
+                <div class="prestigeBar">
+                    <div id="prestigeBarOverlay"></div>
+                </div>
+                <span style="min-width: 25px; text-align: center;" id="tokenCountNext">1</span>
+            </div>
+            <div class="prestigeInfo">
+                <div style="display: flex; flex-direction: column;">
+                    <span id="nextTokenGoal">- Winnie Orbs till next token</span>
+                    <span id="prestigeTokensCount">0 Tokens</span>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <span id="prestigeWPSBoost">+0% WPS Boost</span>
+                </div>
+                <span style="color: grey; cursor: pointer; position: absolute; bottom: 10px; right: 10px; user-select: none;"
+                    onclick="toggleMenu('help')">?</span>
+            </div>
+            <div class="prestigeButtonContainer">
+                <button onclick="openPrestige()">Prestige</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="topper">
+        <span>Winnie Accumulator, by DeBread</span>
+        <div style="display: flex; gap: 20px;">
+            <a href="https://forms.gle/bZ5KWNVnFWzpSFBS8" target="_blank">Feature Request Form</a>
+            <span>v0.01</span>
+        </div>
+    </div>
+
+    <!-- <div class="caution">
+        <div onclick="unlockDevTools()">
+            <span>PRIVATE DEVELOPER BUILD - BETA v0.00</span>
+        </div>
+    </div> -->
+
+    <script src="DeBread.js"></script>
+    <script src="save.js"></script>
+    <script src="script.js"></script>
+    <script src="settings.js"></script>
+    <script src="achievements.js"></script>
+    <script src="stats.js"></script>
+    <script src="goldenWinnie.js"></script>
+    <script src="debug.js"></script>
+    <script src="gamble.js"></script>
+    <script src="dialogue.js"></script>
+    <script src="prestige.js"></script>
+    <script src="spells.js"></script>
+    <script src="misc.js"></script>
+</body>
+
+</html>
