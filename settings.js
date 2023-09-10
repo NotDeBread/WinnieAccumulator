@@ -48,7 +48,7 @@ function changeMode(type) {
 updateSphere()
 function updateSphere() {
     doge('modeSelected').innerText = save.settings.modes[save.settings.mode]
-    doge('sphere').src = `media/spheres/${save.settings.modes[save.settings.mode]}.gif`
+    doge('sphere').src = `media/spheres/${save.settings.modes[save.settings.mode].toLowerCase()}.gif`
 
     if(save.settings.modes[save.settings.mode] === 'Sasha' && save.settings.togglable.orbEffects) {
         doge('sphere').classList.add('sasho')
