@@ -1,0 +1,1761 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+:root {
+  --bouncy: cubic-bezier(0,2,.75,1);
+
+  --LightBG1: rgb(50, 50, 50);
+  --LightBG0: rgb(40, 40, 40);
+  --BG: rgb(30, 30, 30);
+  --DarkBG0: rgb(25, 25, 25);
+  --DarkBG1: rgb(20, 20, 20);
+  --DarkBG2: rgb(15, 15, 15);
+  --DarkBG3: rgb(10, 10, 10);
+}
+
+@keyframes pulse {
+  from {
+    scale: 110%;
+  }
+  to {
+    scale: 100%;
+  }
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 5px;
+}
+
+/* Customize the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: rgb(70, 70, 70); /* Color of the thumb */
+  border-radius: 6px; /* Rounded corners */
+}
+
+
+body {
+  margin: 0;
+  background-color: var(--BG);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+#centralNotice {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100dvw - 20px);
+  height: calc(100dvh - 20px);
+  z-index: 10000;
+  padding: 10px;
+  background-color: var(--DarkBG0);
+}
+
+#loadingScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--BG);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  font-weight: 700;
+  transition: opacity ease-in-out 0.5s;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.loadingScreenBar {
+  width: 500px;
+  height: 20px;
+  background-color: var(--DarkBG1);
+  overflow: hidden;
+  display: flex;
+  border-radius: 5px;
+}
+
+#loadingScreenBarOverlay {
+  width: 0;
+  height: 100%;
+  background-color: white;
+  transition: width cubic-bezier(0,1,.5,1) 1s;
+}
+
+#loadingScreenBarWaves {
+  width: 50px;
+  height: 20px;
+  overflow: hidden;
+  background-image: url(media/loading.png);
+  animation: loadingWaves 1s linear infinite forwards;
+  transition: width cubic-bezier(0,1,.5,1) 1s;
+}
+
+@keyframes loadingWaves {
+  to {
+    background-position-y: 50px;
+  }
+}
+
+#screenOverlay {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  background-color: white;
+  opacity: 0;
+}
+
+@keyframes screenAnim {
+  75% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#creditsContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: none;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: creditsOpacity 20s linear 1 forwards;
+}
+
+#credits {
+  position: absolute;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  animation: creditsScroll 20s linear 1 forwards;
+}
+
+@keyframes creditsScroll {
+  from {
+    top: 100vh;
+  }
+  to {
+    top: -1000px;
+  }
+}
+
+@keyframes creditsOpacity {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#mineButton {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  cursor: pointer;
+  user-select: none;
+  background-color: rgb(50, 50, 50);
+  box-shadow: inset 2px 2px rgb(60, 60, 60), inset -2px -2px rgb(40, 40, 40);
+  padding: 5px;
+  z-index: 3;
+}
+
+#mineButton:active {
+  box-shadow: inset -2px -2px rgb(60, 60, 60), inset 2px 2px rgb(40, 40, 40);
+}
+
+#mineContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+#mine {
+  width: 750px;
+  background-color: rgb(50, 50, 50);
+  box-shadow: inset 2px 2px rgb(60, 60, 60), inset -2px -2px rgb(40, 40, 40);
+  padding: 10px;
+  min-height: 240px;
+  position: relative;
+  pointer-events: all;
+}
+
+.mineHeader {
+  display: flex;
+  justify-content: space-between;
+  line-height: 1;
+  cursor: auto;
+}
+
+.mineHeader span {
+  font-weight: 700;
+  font-size: 1.25em;
+}
+
+#rockContainer {
+  width: 100%;
+  height: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+.rockBox {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.rock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rock img {
+  width: 75px;
+  height: 75px;
+  animation: rockFall 0.25s cubic-bezier(.5,0,1,.5) 1 forwards;
+}
+
+@keyframes rockFall {
+  from {
+    transform: translateY(-50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.rockHealthBar {
+  position: relative;
+  background-color: rgb(20, 20, 20);
+  height: 10px;
+  width: 75px;
+  overflow: hidden;
+  border-radius: 2.5px;
+  animation: rockHealth 0.25s ease-in-out 1 forwards;
+}
+
+@keyframes rockHealth {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(100%);
+  }
+}
+
+.rockHealthOverlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: width cubic-bezier(0,1,.5,1) 0.5s, background-color cubic-bezier(0,1,.5,1) 0.5s;
+  background-color: hsl(100, 100%, 50%);
+}
+
+.rockPopupText {
+  position: absolute;
+  user-select: none;
+  pointer-events: none;
+  font-weight: 700;
+  filter: drop-shadow(0px 0px 5px black);
+  z-index: 5;
+  animation: rockText 1s ease-out 1 forwards;
+}
+
+@keyframes rockText {
+  to {
+    transform: translateY(-25px);
+    opacity: 0;
+  }
+}
+
+.rockParticle {
+  position: absolute;
+  /* background-color: rgb(50, 50, 50); */
+  background-color: white;
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes rockParticle {
+  from {
+      opacity: 1;
+      transform: translate(0, 0);
+  }
+  to {
+      opacity: 0;
+      transform: translate(var(--rockMoveX), var(--rockMoveY)) rotate(var(--rockRotate)) scale(var(--rockScale));
+  }
+}
+
+.pickaxeInfo {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+  gap: 5px;
+  position: absolute;
+  bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  outline: 10px solid rgba(0, 0, 0, 0.1);
+  width: calc(100% - 20px);
+
+}
+
+#pickaxeImg {
+  width: 70px;
+}
+
+.pickaxeInfoText {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+}
+
+#pickaxeName {
+  font-size: 1.25em;
+  font-weight: 700;
+}
+
+#debugChat {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+#debugOutput {
+  height: 250px;
+  width: 500px;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  transition: width ease-in-out 0.25s, height ease-in-out 0.25s;
+}
+
+#debugOutput span {
+  animation: debugChat 0.5s ease-out 1 forwards;
+}
+
+#debugInput {
+  z-index: 100;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 25px;
+  width: 500px;
+  border: none;
+  padding: 0;
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  transition: width ease-in-out 0.25s;
+}
+
+#centerNotiContainer {
+  width: 100vw;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.centerNoti {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  animation: centerNoti 0.25s ease-out 1 forwards;
+  transition: opacity ease-in-out 1s;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  z-index: 2;
+  user-select: none;
+  pointer-events: none;
+}
+
+@keyframes centerNoti {
+  from {
+    height: 0;
+    scale: 0;
+    padding: 0;
+    margin-bottom: 0;
+  }
+  to {
+    height: 20px;
+    scale: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+/* GAMBLE */
+
+#gamble {
+  width: 500px;
+  height: 200px;
+  box-shadow: inset 2px 2px rgb(60, 60, 60), inset -2px -2px rgb(40, 40, 40);
+  background-color: rgb(50, 50, 50);
+  padding: 5px;
+  position: relative;
+  pointer-events: all;
+}
+
+.innerGamble {
+  display: flex;
+  width: 100%;
+}
+
+.innerGamble section {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gambleHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.25em;
+  font-weight: 700;
+  width: 100%;
+  height: fit-content;
+}
+
+.betContainer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  line-height: 1.2;
+}
+
+#betError {
+  color: red;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.betInputContainer {
+  display: flex;
+  justify-content: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input:focus {
+  outline: none;
+}
+
+.betInputContainer input {
+  border: none;
+  background-color: var(--DarkBG2);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  width: 30px;
+  text-align: center;
+  box-shadow: 2px 2px inset var(--DarkBG3), -2px -2px inset  var(--DarkBG1);
+}
+
+#betOutput {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.gambleArrowContainer {
+  height: 165px;
+  display: flex;
+  justify-content: center;
+}
+
+#gambleWheel {
+  height: 165px;
+  width: 50px;
+  background-color: rgb(20, 20, 20);
+  box-shadow: 2px 2px rgb(60, 60, 60), -2px -2px rgb(40, 40, 40), inset 0px 0px 5px 5px black;
+  overflow: hidden;
+}
+
+#innerGambleWheel {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0px);
+  transition: transform cubic-bezier(0,1,.5,1) 5s;
+}
+
+#innerGambleWheel div {
+  width: 50px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+}
+
+/* TOOLTIP */
+
+#tooltip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 300px;
+  /* min-width: 200px; */
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  z-index: 4;
+  position: absolute;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity ease-in-out 0.25s;
+}
+
+#tooltipTitle {
+  font-size: 1.25em;
+  font-weight: 700;
+}
+
+#tooltipQuote {
+  color: grey;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+#tooltipDesc {
+  max-width: 300px;
+}
+
+#tooltipPrice {
+  font-weight: 700;
+}
+
+#simpleTooltip {
+  opacity: 0;
+  position: absolute;
+  padding: 5px;
+  width: fit-content;
+  pointer-events: none;
+  user-select: none;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  z-index: 4;
+  border-radius: 5px;
+  transition: top ease-in-out 0.25s, left ease-in-out 0.25s, opacity ease-in-out 0.25s;
+}
+
+
+/* DEVTOOLS MENU */
+
+#devButton {
+  display: none;
+  position: fixed;
+  left: 10px;
+  bottom: 90px;
+  color: grey;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+}
+
+#devButton:hover {
+  text-decoration: underline;
+}
+
+#devTools {
+  position: fixed;
+  bottom: 0;
+  left: -260px;
+  transition: left cubic-bezier(0,1,.5,1) 0.5s;
+  z-index: 3;
+  background-color: rgb(50, 50, 50);
+  box-shadow: inset 2px 2px rgb(60, 60, 60), inset -2px -2px rgb(40, 40, 40);
+  width: 250px;
+  padding: 5px;
+}
+
+.devButtonRow {
+  display: flex;
+  width: 100%;
+}
+
+.devButtonRow button {
+  width: 100% !important;
+}
+
+/* STATS MENU */
+
+.statsButton {
+  position: fixed;
+  left: 10px;
+  bottom: 50px;
+  color: grey;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+}
+
+#stats {
+  width: 350px;
+  position: fixed;
+  bottom: 0;
+  left: -360px;
+  transition: left cubic-bezier(0,1,.5,1) 0.5s;
+  z-index: 3;
+  padding: 5px;
+  background-color: rgb(50, 50, 50);
+  box-shadow: inset 2px 2px rgb(60, 60, 60), inset -2px -2px rgb(40, 40, 40);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat span {
+  white-space: nowrap;
+}
+
+.statDivider {
+  height: 1px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#statisticsMenu  {
+  /* where the fuck are these styles coming from?!??!?!?s */
+}
+
+.statsHeader span {
+  font-size: 1.25em;
+  font-weight: 700;
+}
+
+#statUpgrades {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#statUpgrades img {
+  width: 50px;
+}
+
+#statUpgrades img:hover {
+  transform: scale(125%);
+}
+
+/* ACHIEVEMENT MENU */
+
+.achievementsButton {
+  position: fixed;
+  left: 10px;
+  bottom: 30px;
+  color: grey;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+}
+
+#achievements {
+  width: 400px;
+  position: fixed;
+  bottom: 0;
+  left: -410px;
+  transition: left cubic-bezier(0,1,.5,1) 0.5s;
+  z-index: 3;
+  padding: 5px;
+  background-color: rgb(50, 50, 50);
+  box-shadow: inset 2px 2px rgb(60, 60, 60), inset -2px -2px rgb(40, 40, 40);
+}
+
+.achievementsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+.achievementModes {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.achievementModes button {
+  width: 75px !important;
+}
+
+#achievementsList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: calc(100vh - 175px);
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.achievement {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 10px);
+  max-width: 395px;
+  background-color: var(--BG);
+  box-shadow: inset 2px 2px var(--LightBG1), inset -2px -2px var(--DarkBG1);
+  padding: 5px;
+  line-height: 1;
+}
+
+.achievementTitle {
+  font-weight: 700;
+}
+
+.achievementDesc {
+  color: rgb(150, 150, 150);
+}
+
+/* ACHIEVEMENT POPUP */
+
+#achContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  gap: 10px;
+}
+
+.ach {
+  min-width: 300px;
+  max-width: 300px;
+  background-color: rgb(20, 20, 20);
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  gap: 10px;
+  user-select: none;
+  cursor: pointer;
+  outline: 3px solid rgb(15, 15, 15);
+  transition: opacity ease-in-out 1s;
+  animation: ach 0.5s cubic-bezier(.5,1.3,.6,1) 1 forwards;
+}
+
+@keyframes ach {
+  from {
+    transform: translateX(-500px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.achInfo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.achTitle {
+  font-weight: 700;
+}
+
+.achDesc {
+  color: grey;
+}
+
+/* SETTINGS */
+
+.setting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting input {
+  cursor: pointer;
+}
+
+#modeDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#modeDots div {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  border: 2.5px solid var(--DarkBG0);
+}
+
+#modeDots div:hover {
+  scale: 200%;
+}
+
+#deleteSave {
+  width: 100%;
+  background-color: rgb(102, 44, 44);
+  box-shadow: inset 2px 2px rgb(110, 60, 51), inset -2px -2px rgb(87, 34, 41);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.75em;
+  user-select: none;
+}
+
+#deleteSave:active {
+  box-shadow: inset -2px -2px rgb(110, 60, 51), inset 2px 2px rgb(87, 34, 41);
+}
+
+#game {
+  display: flex;
+  width: 100vw;
+  user-select: none;
+  height: calc(100vh - 95px);
+  padding-top: 20px;
+}
+
+/* GAME SECTIONS */
+
+#game section {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.gameLeft {
+  padding-bottom: 100px;
+}
+
+#toolbarTooltip {
+  position: absolute;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  padding: 5px;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0px 0px 2px black);
+  transition: left ease-in-out 0.25s, right ease-in-out 0.25s, opacity ease-in-out 0.25s;
+}
+
+#toolbarTooltipTitle {
+  font-size: 1.25em;
+  font-weight: 700;
+}
+
+#toolbar {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 50px;
+  display: flex;
+  z-index: 2;
+  transition: box-shadow ease-in-out 0.25s;
+}
+
+#toolbar div {
+  display: flex;
+}
+
+#toolbarMiddle {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 3px solid var(--DarkBG1);
+  background-color: var(--DarkBG0);
+}
+
+.prestigeButton {
+  width: 250px !important;
+  padding: 0px 5px;
+  display: flex;
+  gap: 5px;
+  font-weight: 700;
+}
+
+.prestigeBar {
+  width: 100%;
+  height: 15px;
+  overflow: hidden;
+  background-color: var(--BG);
+  outline: 2px solid var(--LightBG1);
+  box-shadow: inset 2px 2px var(--DarkBG0), inset -2px -2px var(--LightBG0);
+}
+
+#prestigeBarOverlay, #menuPrestigeBarOverlay {
+  width: 50%;
+  height: 100%;
+  background-image: url(media/bar.png);
+  transition: width linear 0.1s;
+  box-shadow: inset 0px 0px 5px white;
+  animation: rainbow 2.5s linear infinite forwards;
+}
+
+@keyframes rainbow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    filter: hue-rotate(90deg);
+  }
+  50% {
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    filter: hue-rotate(270deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.toolbarButton {
+  height: 100%;
+  width: 50px;
+  background-color: var(--DarkBG0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-top: 3px solid var(--DarkBG1);
+  transition: height var(--bouncy) 0.25s, transform var(--bouncy) 0.25s;
+}
+
+.toolbarButton:hover {
+  background-color: var(--BG);
+  border-top: 3px solid white;
+  height: 55px;
+  transform: translateY(-5px);
+}
+
+.toolbarButton:active {
+  height: 50px;
+  transform: none;
+}
+
+.toolbarButton img {
+  height: 45px;
+  filter: invert();
+}
+
+.toolbarMenu {
+  position: absolute;
+  bottom: -500px;
+  padding: 5px;
+  margin: 3px;
+  transition: bottom cubic-bezier(0,1,.5,1) 0.25s;
+  background-color: var(--DarkBG0);
+  outline: 3px solid var(--DarkBG1);
+  min-width: 250px;
+  max-width: 500px;
+  max-height: calc(100vh - 95px);
+  display: none;
+}
+
+.toolbarMenu button, #prestigeMenuTitle button, #menuPrestigeButton {
+  background-color: var(--DarkBG2);
+  font-family: "Poppins", sans-serif;
+  color: white;
+  border: none;
+  cursor: pointer;
+  outline: 2px solid var(--DarkBG3);
+  border-radius: 5px;
+  transition: scale var(--bouncy) 0.25s;
+}
+
+.toolbarMenu button:hover, #prestigeMenuTitle button:hover, #menuPrestigeButton:hover {
+  background-color: var(--LightBG0);
+  outline: 2px solid var(--DarkBG1);
+  scale: 105%;
+}
+
+.toolbarMenu button:active, #prestigeMenuTitle button:active, #menuPrestigeButton:active {
+  background-color: var(--LightBG1);
+  outline: 2px solid var(--DarkBG2);
+  scale: 100%;
+}
+
+#mineMenu, #gambleMenu {
+  right: 0;
+}
+
+/* MENUS */
+
+.menuHeader {
+  font-size: 1.1em;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menuCloseButton {
+  width: 25px;
+  height: 25px;
+  background-color: var(--DarkBG1);
+  font-family: "Poppins", sans-serif;
+  color: white;
+  border: none;
+  font-weight: 700;
+  border-radius: 5px;
+}
+
+/* PRESTIGE */
+
+#prestigeMenuContainer {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  backdrop-filter: blur(10px) brightness(75%);
+}
+
+#prestigeMenu {
+  width: 500px;
+  max-width: 75vw;
+  background-color: rgb(25, 25, 25);
+  outline: 3px solid rgb(20 ,20 ,20);
+  padding: 5px;
+  box-shadow: 0px 0px 50px black;
+}
+
+#prestigeMenuTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+#prestigeMenuTitle span {
+  font-size: 1.1em;
+  font-weight: 700;
+}
+
+#prestigeMenuTitle button {
+  width: 25px;
+  height: 25px;
+}
+
+#menuPrestigeBarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 20px);
+  gap: 10px;
+  margin-top: 10px;
+  margin: 10px 10px 0px 10px;
+}
+
+#menuPrestigeBarContainer span {
+  font-weight: 700;
+}
+
+#menuPrestigeBar {
+  width: 100%;
+  height: 25px;
+  background-color: rgb(15, 15, 15);
+  outline: 3px solid rgb(40, 40, 40);
+}
+
+#menuPrestigeBarInfo {
+  margin: 10px 10px 0 10px;
+  display: flex;
+  line-height: 1.1;
+  justify-content: space-between;
+}
+
+.menuPrestigeBarInfo span:nth-child(2) {
+  text-align: right;
+}
+
+#menuPrestigeButtonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* LEFT SECTION */
+
+.gameLeft {
+  gap: 25px;
+}
+
+.counters {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  line-height: 1;
+}
+
+#countDisplay {
+  font-size: 2em;
+  font-weight: 700;
+  transition: color ease-in-out 0.25s;
+}
+
+.orbPopup {
+  position: absolute;
+  color: lime;
+  filter: drop-shadow(0px 0px 5px black);
+  font-weight: 900;
+  font-size: 1.25em;
+  animation: popupX 1s ease-out 1 forwards, popupY 1s var(--bouncy) 1 forwards;
+}
+
+@keyframes popupX {
+  to {
+    translate: var(--PopupX);
+    opacity: 0;
+  }
+}
+
+@keyframes popupY {
+  to {
+    transform: translateY(var(--PopupY));
+  }
+}
+
+#cheatsDisplay {
+  color: red;
+  font-size: 0.75em;
+  font-weight: 700;
+}
+
+/* SPHERE STYLES */
+
+#sphere {
+  width: 200px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: scale var(--bouncy) 0.25s;
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.5));
+}
+
+.spherePrestigeAnim {
+  animation: spherePrestige 5s ease-in 1 forwards;
+}
+
+@keyframes spherePrestige {
+  from {
+    scale: 100%;
+    filter: brightness(100%) drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.5));
+  }
+  to {
+    scale: 125%;
+    filter: brightness(500%) drop-shadow(0px 0px 400px rgb(255, 255, 255));
+  }
+}
+
+.sasho {
+  animation: sasho 1s ease-in-out infinite forwards, sashoSpin 5s linear infinite forwards;
+}
+
+@keyframes sasho {
+  from {
+    filter: contrast(200%);
+    transform: scale(110%);
+  }
+  50% {
+    filter: contrast(100%);
+    transform: scale(100%);
+  }
+  to {
+    filter: contrast(200%);
+    transform: scale(110%);
+  }
+}
+
+@keyframes sashoSpin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+#sphere:hover {
+  scale: 105%;
+}
+
+#sphere:active {
+  scale: 100%;
+}
+
+.clickDisplay {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1.5em;
+  font-weight: 700;
+  filter: drop-shadow(0px 0px 3px black);
+  animation: clickDisplay 3s ease-out 1 forwards;
+}
+
+@keyframes clickDisplay {
+  to {
+    transform: translateY(-150px) scale(0);
+    opacity: 0;
+  }
+}
+
+.clickEffect {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  pointer-events: none;
+  mix-blend-mode: lighten;
+  animation: clickEffect 1.5s ease-out 1 forwards;
+}
+
+@keyframes clickEffect {
+  from {
+    filter: blur(10px);
+    scale: 100%;
+  }
+  to {
+    filter: blur(100px);
+    scale: 0;
+  }
+}
+
+
+/* RIGHT SECTION */
+
+.gameRight {
+  gap: 10px;
+}
+
+.upgradeStore {
+  background-color: var(--DarkBG0);
+  padding: 5px;
+  font-size: 1.25em;
+  font-weight: 700;
+  width: 350px;
+  text-align: center;
+}
+
+#upgradeContainer {
+  width: 100%;
+  min-height: 50px;
+  max-height: 50px;
+  overflow: hidden;
+  background-color: var(--DarkBG1);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+#upgradeContainer:hover {
+  max-height: unset;
+}
+
+#noUpgrades {
+  width: 350px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75em;
+  font-weight: 500;
+  color: grey;
+}
+
+.upgrade {
+  width: 50px;
+  cursor: pointer;
+  outline: 0px solid black;
+  animation: upgradeAnim 0.25s cubic-bezier(0,1.66,.07,.86) 1 forwards;
+  transition: outline var(--bouncy) 0.25s;
+}
+
+@keyframes upgradeAnim {
+  from {
+    scale: 0;
+  }
+}
+
+.upgrade:hover {
+  outline: 3px solid rgb(50, 50, 50);
+}
+
+.upgrade:active {
+  outline: 3px solid rgb(70, 70, 70);
+}
+
+#spellsContainer {
+  background-color: var(--DarkBG0);
+  display: none;
+  padding: 5px;
+  font-size: 1.25em;
+  font-weight: 700;
+  width: 350px;
+  text-align: center;
+}
+
+#spells {
+  height: 50px;
+  width: calc(100% - 10px);
+  background-color: var(--DarkBG1);
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px;
+}
+
+.spell {
+  cursor: pointer;
+}
+
+.spell:hover {
+  scale: 105%;
+}
+
+.spell:active {
+  scale: 100%;
+}
+
+.flasksContainer {
+  width: 100%;
+}
+
+.flasksBar {
+  width: calc(100% - 6px);
+  height: 25px;
+  background-color: var(--DarkBG1);
+  position: relative;
+  border: 3px solid var(--DarkBG2);
+}
+
+.flasksInfo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0px 0px 5px black);
+}
+
+#flasksBarOverlay {
+  height: 100%;
+  width: 0;
+  background-image: url(media/bar.png);
+  box-shadow: inset 0px 0px 5px white;
+  transition: width cubic-bezier(0,1,.5,1) 0.5s;
+}
+
+#flasksGet {
+  right: 0;
+  height: 25px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid var(--DarkBG2);
+  background-color: var(--DarkBG1);
+  cursor: pointer;
+  transition: scale var(--bouncy) 0.25s;
+}
+
+#flasksGet:hover {
+  scale: 110%;
+}
+
+#flasksGet:active {
+  scale: 100%;
+}
+
+#itemStore, #toolStore {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-size: 1.25em;
+  font-weight: 700;
+  gap: 5px;
+  padding: 5px;
+  background-color: var(--DarkBG0);
+}
+
+.storeButton button {
+  width: 50px;
+  font-weight: 600;
+  align-items: center;
+  box-shadow: inset 2px 2px var(--BG), inset -2px -2px var(--DarkBG1);
+  background-color: var(--DarkBG0);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  cursor: pointer;
+  filter: brightness(150%);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 350px;
+  height: 60px;
+  background-color: var(--DarkBG1);
+  cursor: pointer;
+  outline: 0px solid black;
+  transition: outline var(--bouncy) 0.25s;
+}
+
+.item:hover {
+  outline: 3px solid rgb(50, 50, 50);
+}
+
+.item:active {
+  outline: 3px solid rgb(70, 70, 70);
+}
+
+.itemImg {
+  height: 60px;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1;
+}
+
+.itemPrice {
+  font-size: 0.75em;
+  font-weight: 500;
+  color: red;
+}
+
+.itemCount {
+  font-size: 1.5em;
+  font-weight: 700;
+  padding-right: 10px;
+}
+
+.goldenWinnieContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#goldenWinnieContainer {
+  width: 75vw;
+  height: 80vh;
+  position: relative;
+}
+
+.goldenWinnie {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 2;
+  animation: goldenWinnie 2s ease-in-out infinite forwards, goldenWinnieIn 15s ease-in-out infinite, goldenWinnieRotate 3s ease-in-out infinite;
+}
+
+@keyframes goldenWinnie {
+  from {
+    scale: 100%;
+    filter: brightness(100%) drop-shadow(0px 0px 10px rgba(255, 255, 150, 0.5));
+  }
+  50% {
+    scale: 110%;
+    filter: brightness(125%) drop-shadow(0px 0px 25px rgba(255, 255, 150, 0.5));
+  }
+  to {
+    scale: 100%;
+    filter: brightness(100%) drop-shadow(0px 0px 10px rgba(255, 255, 150, 0.5));
+  }
+}
+
+@keyframes goldenWinnieRotate {
+  from {
+    rotate: 10deg;
+  }
+  50% {
+    rotate: -10deg;
+  }
+  to {
+    rotate: 10deg;
+  }
+}
+
+@keyframes goldenWinnieIn {
+  from {
+    transform: scale(0);
+  }
+  25%, 75% {
+    transform: scale(100%);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+.GWFlash {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-color: rgba(255, 246, 118, 0.5);
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(50px);
+  animation: GWFlash 1s ease-out 1 forwards;
+}
+
+@keyframes GWFlash {
+  to {
+    scale: 0;
+    opacity: 0;
+  }
+}
+
+#goldenTimerContainer {
+  position: absolute;
+  top: 23px;
+  width: 100vw;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 25px;
+}
+
+.goldenTimer {
+  height: 5px;
+  background: url(media/goldenTimer.png);
+}
+
+@keyframes goldenTimer {
+  from {
+    width: 100vw;
+  }
+  to {
+    width: 0;
+  }
+}
+
+#goldenIconContainer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  z-index: 2;
+}
+
+.goldenIcon {
+  position: relative;
+  margin-bottom: 5px;
+  display: none;
+}
+
+.goldenIcon img {
+  width: 50px;
+  height: 50px;
+}
+
+.goldenIcon span {
+  position: absolute;
+  bottom: -5px;
+  right: 25px;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 1.5em;
+  text-align: right;
+  filter: drop-shadow(0px 0px 5px black);
+}
+
+.caution {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: url(media/caution.png);
+  width: 100vw;
+  animation: caution 1s linear infinite forwards;
+}
+
+.caution div {
+  width: 100vw;
+  height: 100%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: inset 0px 0px 5px 0px black;
+}
+
+@keyframes caution {
+  to {
+    background-position: 50px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  #game {
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+  }
+  .gameLeft {
+    width: 100vw !important;
+    padding-bottom: 0 !important;
+    min-height: 350px !important;
+  }
+  .gameRight {
+    width: 100vw !important;
+    border-top: 3px solid var(--DarkBG0);
+    padding-top: 5px;
+  }
+  body {
+    overflow: scroll;
+  }
+  #tooltip {
+    display: none;
+  }
+  .prestigeContainer {
+    position: fixed;
+    bottom: 0;
+  }
+  .prestige {
+    position: unset;
+    width: 100vw;
+    white-space: nowrap;
+  }
+  #toolStore {
+    margin-bottom: 250px;
+  }
+  .goldenWinnieContainer {
+    position: fixed;
+  }
+  #gambleContainer {
+    position: fixed;
+  }
+  #prestigeWarningContainer {
+    position: fixed;
+  }
+  .goldenWinnieContainer {
+    z-index: 10;
+  }
+  #achievements {
+    width: calc(100vw - 10px);
+  }
+  #help {
+    width: calc(100vw - 10px);
+  }
+  #game section {
+    max-height: unset;
+  }
+}
+
+.topper {
+  width: calc(100vw - 20px);
+  height: 25px;
+  background-color: var(--DarkBG0);
+  outline: 2px solid var(--DarkBG1);
+  font-size: 0.75em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.topper a {
+  text-decoration: none;
+  color: white;
+}
+
+.topper a:hover {
+  text-decoration: underline;
+}
