@@ -1759,3 +1759,19 @@ input:focus {
 .topper a:hover {
   text-decoration: underline;
 }
+
+.particle {
+  background-color: white;
+  position: absolute;
+  pointer-events: none;
+  z-index: 5;
+  animation: particleAnim var(--particleLifespan) var(--particleTimingFunction) 1 forwards;
+}
+
+@keyframes particleAnim {
+  to {
+    transform: translate(var(--particleX), var(--particleY)) rotate(var(--particleRotate)) scale(var(--particleSizeX), var(--particleSizeY));
+    background-color: var(--particleColor);
+    opacity: 0;
+  }
+}
